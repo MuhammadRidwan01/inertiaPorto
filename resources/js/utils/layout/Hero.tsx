@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { BackgroundGradientAnimation } from "@/utils/ui/background-gradient-animation";
 import { FlipWords } from "@/utils/ui/flip-words";
 import { IconX, IconMenu, IconCircleArrowDown } from "@tabler/icons-react";
-import { Link } from "@inertiajs/react";
-import { AuroraBackground } from "../ui/aurora-background";
 
 const Hero: React.FC<{ passionate: string[]; skills: string[] }> = ({
     passionate,

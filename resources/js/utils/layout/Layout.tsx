@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "@inertiajs/react";
-import { FloatingDock } from "@/utils/ui/floating-dock";
 import {
     IconArrowUp,
     IconBrandGithub,

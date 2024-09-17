@@ -35,7 +35,7 @@ const words3 = `When I'm not coding, I enjoy learning new things and keeping up 
                         <div className="w-full md:w-1/2 flex justify-center">
                             <BackgroundGradient className="rounded">
                                 <img
-                                    src="/image/MUHAMMAD RIDWAN (2).jpg"
+                                    src="/image/MUHAMMAD RIDWAN (2).webp"
                                     alt="About Me"
                                     className="rounded-3xl shadow-2xl max-w-xs md:max-w-sm transform hover:scale-105 transition-transform duration-300"
                                 />
