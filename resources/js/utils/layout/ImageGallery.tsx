@@ -236,7 +236,7 @@ const DetailModal: React.FC<{
                 onClick={onClose}
                 className="absolute right-4 top-4 z-10 rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
             >
-                <X size={20} />
+                <X size={20} className="bg-black"/>
             </button>
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="relative">
