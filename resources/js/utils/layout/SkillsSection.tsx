@@ -125,7 +125,7 @@ const SkillsSection: React.FC = () => {
                 </CardContainer>
 
                 {/* Backend Skills Card */}
-                <CardSpotlight className="glass-effect bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-10 transition duration-300 ease-in-out hover:shadow-2xl transform hover:-translate-y-1">
+                <CardSpotlight className="glass-effect bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-10 transition duration-300 ease-in-out hover:shadow-2xl transform hover:-translate-y-1 w-full max-w-lg">
                 <div>
                     <h2 className="text-xl font-bold mb-6 flex items-center text-white md:text-3xl">
                         <IconBrandLaravel

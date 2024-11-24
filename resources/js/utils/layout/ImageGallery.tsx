@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, X, ExternalLink, Calendar, Award } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+"use client"
+import React, { useState, useCallback, useMemo } from "react";
+import {
+    ChevronLeft,
+    ChevronRight,
+    X,
+    ExternalLink,
+    Calendar,
+    Award,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { LinkPreview } from "../ui/link-preview";
 
+// Memindahkan interface dan data ke file terpisah
 interface Sertifikat {
     id: number;
     src: string;
@@ -13,25 +23,147 @@ interface Sertifikat {
     certLink: string;
     issuerLogo: string;
 }
+// Helper function to ensure URLs are absolute
+const getAssetUrl = (path: string): string => {
+    // You can change this to your actual domain
+    const domain = "https://395f-66-96-225-109.ngrok-free.app";
+
+    // If the path is already a full URL, return it as is
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+    }
+
+    // Remove leading slash if present to avoid double slashes
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    return `${domain}/${cleanPath}`;
+};
 
 const sertifikatData: Sertifikat[] = [
-    { id: 1, src: '/image/certificates/Dkn_depan.webp', title: 'BackEnd certificate 1', description: 'My first php Certificate', category: 'BackEnd certificate', issuer: 'Dimensi Kreasi Nusantara', issueDate: '2024-04-05', certLink: '/image/certificates/Dkn_depan.webp', issuerLogo: '/image/logos/dimensi nusantara.webp' },
-    { id: 2, src: '/image/certificates/Dkn_belakang.webp', title: 'BackEnd certificate 2', description: 'My first php Certificate', category: 'BackEnd certificate', issuer: 'Dimensi Kreasi Nusantara', issueDate: '2024-04-05', certLink: '/image/certificates/Dkn_belakang.webp', issuerLogo: '/image/logos/dimensi nusantara.webp' },
-    { id: 3, src: '/image/certificates/PtWan_depan.webp', title: 'Html Css', description: 'Html Css native sertificate 1', category: 'UI', issuer: 'PT WanTeknologi', issueDate: '2024-03-15', certLink: '/image/certificates/PtWan_depan.webp', issuerLogo: '/image/logos/wanteknologi.webp' },
-    { id: 4, src: '/image/certificates/PtWan_belakang.webp', title: 'Html Css', description: 'Html Css native sertificate 2', category: 'UI', issuer: 'PT WanTeknologi', issueDate: '2024-04-01', certLink: '/image/certificates/PtWan_belakang.webp', issuerLogo: '/image/logos/wanteknologi.webp' },
-    { id: 5, src: '/image/certificates/aws 1.webp', title: 'Cloud Practitioner Essentials', description: 'Mastering the fundamentals of AWS Cloud services', category: 'Cloud Computing', issuer: 'Dicoding', issueDate: '2024-11-23', certLink: 'https://www.dicoding.com/certificates/L4PQ570GVZO1', issuerLogo: '/image/logos/dicoding.webp' },
-    { id: 6, src: '/image/certificates/aws 2.webp', title: 'Cloud Practitioner Essentials', description: 'In-depth understanding of AWS infrastructure and services', category: 'Cloud Computing', issuer: 'Dicoding', issueDate: '2024-06-01', certLink: 'https://www.dicoding.com/certificates/L4PQ570GVZO1', issuerLogo: '/image/logos/dicoding.webp' },
-    { id: 7, src: '/image/certificates/aws 3.webp', title: 'Cloud Practitioner Essentials', description: 'Advanced cloud architecture and best practices', category: 'Cloud Computing', issuer: 'Dicoding', issueDate: '2024-11-23', certLink: 'https://www.dicoding.com/certificates/L4PQ570GVZO1', issuerLogo: '/image/logos/dicoding.webp' },
-    { id: 8, src: '/image/certificates/js 1.webp', title: 'JavaScript Fundamentals', description: 'Mastering the core concepts of JavaScript programming', category: 'Programming', issuer: 'JavaScript Academy', issueDate: '2024-11-17', certLink: 'https://www.dicoding.com/certificates/6RPNY97R4Z2M', issuerLogo: '/image/logos/dicoding.webp' },
-    { id: 9, src: '/image/certificates/js 2.webp', title: 'JavaScript Fundamentals', description: 'Exploring advanced JavaScript features and patterns', category: 'Programming', issuer: 'JavaScript Academy', issueDate: '2024-11-17', certLink: 'https://www.dicoding.com/certificates/6RPNY97R4Z2M', issuerLogo: '/image/logos/dicoding.webp' },
-    { id: 10, src: '/image/certificates/js 3.webp', title: 'JavaScript Fundamentals', description: 'Becoming a JavaScript expert with practical applications', category: 'Programming', issuer: 'JavaScript Academy', issueDate: '2024-11-17', certLink: 'https://www.dicoding.com/certificates/6RPNY97R4Z2M', issuerLogo: '/image/logos/dicoding.webp' },
+    {
+        id: 1,
+        src: getAssetUrl("/image/certificates/Dkn_depan.webp"),
+        title: "PHP Native Certificate 1",
+        description: "Pembuatan Aplikasi pemesanan hotel berbasis web",
+        category: "BackEnd certificate",
+        issuer: "Dimensi Kreasi Nusantara",
+        issueDate: "2024-06-05",
+        certLink: getAssetUrl("/image/certificates/Dkn_depan.webp"),
+        issuerLogo: getAssetUrl("/image/logos/dimensi nusantara.webp"),
+    },
+    {
+        id: 2,
+        src: getAssetUrl("/image/certificates/Dkn_belakang.webp"),
+        title: "PHP Native Certificate 2",
+        description: "Pembuatan Aplikasi pemesanan hotel berbasis web",
+        category: "BackEnd certificate",
+        issuer: "Dimensi Kreasi Nusantara",
+        issueDate: "2024-06-05",
+        certLink: getAssetUrl("/image/certificates/Dkn_belakang.webp"),
+        issuerLogo: getAssetUrl("/image/logos/dimensi nusantara.webp"),
+    },
+    {
+        id: 3,
+        src: getAssetUrl("/image/certificates/PtWan_depan.webp"),
+        title: "Html Css",
+        description: "Html Css native sertificate 1",
+        category: "UI",
+        issuer: "PT WanTeknologi",
+        issueDate: "2024-12-01",
+        certLink: getAssetUrl("/image/certificates/PtWan_depan.webp"),
+        issuerLogo: getAssetUrl("/image/logos/wanteknologi.webp"),
+    },
+    {
+        id: 4,
+        src: getAssetUrl("/image/certificates/PtWan_belakang.webp"),
+        title: "Html Css",
+        description: "Html Css native sertificate 2",
+        category: "UI",
+        issuer: "PT WanTeknologi",
+        issueDate: "2024-12-01",
+        certLink: getAssetUrl("/image/certificates/PtWan_belakang.webp"),
+        issuerLogo: getAssetUrl("/image/logos/wanteknologi.webp"),
+    },
+    {
+        id: 5,
+        src: getAssetUrl("/image/certificates/aws 1.webp"),
+        title: "Cloud Practitioner Essentials",
+        description: "Mastering the fundamentals of AWS Cloud services",
+        category: "Cloud Computing",
+        issuer: "Dicoding",
+        issueDate: "2024-11-23",
+        certLink: "https://www.dicoding.com/certificates/L4PQ570GVZO1",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
+    {
+        id: 6,
+        src: getAssetUrl("/image/certificates/aws 2.webp"),
+        title: "Cloud Practitioner Essentials",
+        description: "In-depth understanding of AWS infrastructure and services",
+        category: "Cloud Computing",
+        issuer: "Dicoding",
+        issueDate: "2024-06-01",
+        certLink: "https://www.dicoding.com/certificates/L4PQ570GVZO1",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
+    {
+        id: 7,
+        src: getAssetUrl("/image/certificates/aws 3.webp"),
+        title: "Cloud Practitioner Essentials",
+        description: "Advanced cloud architecture and best practices",
+        category: "Cloud Computing",
+        issuer: "Dicoding",
+        issueDate: "2024-11-23",
+        certLink: "https://www.dicoding.com/certificates/L4PQ570GVZO1",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
+    {
+        id: 8,
+        src: getAssetUrl("/image/certificates/js 1.webp"),
+        title: "JavaScript Fundamentals",
+        description: "Mastering the core concepts of JavaScript programming",
+        category: "Programming",
+        issuer: "Dicoding",
+        issueDate: "2024-11-17",
+        certLink: "https://www.dicoding.com/certificates/6RPNY97R4Z2M",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
+    {
+        id: 9,
+        src: getAssetUrl("/image/certificates/js 2.webp"),
+        title: "JavaScript Fundamentals",
+        description: "Exploring advanced JavaScript features and patterns",
+        category: "Programming",
+        issuer: "Dicoding",
+        issueDate: "2024-11-17",
+        certLink: "https://www.dicoding.com/certificates/6RPNY97R4Z2M",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
+    {
+        id: 10,
+        src: getAssetUrl("/image/certificates/js 3.webp"),
+        title: "JavaScript Fundamentals",
+        description: "Becoming a JavaScript expert with practical applications",
+        category: "Programming",
+        issuer: "Dicoding",
+        issueDate: "2024-11-17",
+        certLink: "https://www.dicoding.com/certificates/6RPNY97R4Z2M",
+        issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
+    },
 ];
 
-const SertifikatCard: React.FC<{ sertifikat: Sertifikat; onClick: () => void }> = ({ sertifikat, onClick }) => {
-    const formattedDate = new Date(sertifikat.issueDate).toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric'
-    });
+// Memisahkan komponen card untuk mengurangi re-render
+const SertifikatCard: React.FC<{
+    sertifikat: Sertifikat;
+    onClick: () => void;
+}> = React.memo(({ sertifikat, onClick }) => {
+    const formattedDate = useMemo(
+        () =>
+            new Date(sertifikat.issueDate).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
+            }),
+        [sertifikat.issueDate]
+    );
 
     return (
         <div
@@ -43,6 +175,7 @@ const SertifikatCard: React.FC<{ sertifikat: Sertifikat; onClick: () => void }> 
                     src={sertifikat.src}
                     alt={sertifikat.title}
                     className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy" // Lazy loading untuk gambar
                 />
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <motion.button
@@ -58,17 +191,16 @@ const SertifikatCard: React.FC<{ sertifikat: Sertifikat; onClick: () => void }> 
                     <span className="rounded-full bg-indigo-100 px-3 py-1 text-sm text-indigo-800">
                         {sertifikat.category}
                     </span>
-                    <a
-                        href={sertifikat.certLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <LinkPreview
+                        url={sertifikat.certLink}
                         className="text-indigo-300 transition-colors hover:text-indigo-100"
-                        onClick={(e) => e.stopPropagation()}
                     >
                         <ExternalLink size={16} />
-                    </a>
+                    </LinkPreview>
                 </div>
-                <h3 className="text-lg font-semibold text-white line-clamp-2">{sertifikat.title}</h3>
+                <h3 className="text-lg font-semibold text-white line-clamp-2">
+                    {sertifikat.title}
+                </h3>
                 <div className="flex items-center space-x-2 text-gray-300">
                     <Award size={16} />
                     <span className="text-sm">{sertifikat.issuer}</span>
@@ -80,22 +212,23 @@ const SertifikatCard: React.FC<{ sertifikat: Sertifikat; onClick: () => void }> 
             </div>
         </div>
     );
-};
+});
 
+// Memisahkan modal ke komponen terpisah
 const DetailModal: React.FC<{
     sertifikat: Sertifikat;
     onClose: () => void;
     onPrev: () => void;
     onNext: () => void;
-}> = ({ sertifikat, onClose, onPrev, onNext }) => (
+}> = React.memo(({ sertifikat, onClose, onPrev, onNext }) => (
     <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+        className="fixed inset-0 z-50 min-h-full flex items-center justify-center bg-black bg-opacity-90 p-4"
     >
         <motion.div
-            className="relative w-full max-w-4xl overflow-hidden rounded-xl bg-white"
+            className="relative w-full max-w-7xl overflow-hidden rounded-xl bg-white"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
         >
@@ -110,7 +243,9 @@ const DetailModal: React.FC<{
                     <img
                         src={sertifikat.src}
                         alt={sertifikat.title}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
+                        width={64}
+                        height={64}
                     />
                     <div className="absolute inset-0 flex items-center justify-between px-4">
                         <button
@@ -127,79 +262,118 @@ const DetailModal: React.FC<{
                         </button>
                     </div>
                 </div>
-                <div className="space-y-4 p-6">
-                    <div className="flex items-center space-x-3">
-                        <img
-                            src={sertifikat.issuerLogo}
-                            alt={sertifikat.issuer}
-                            className="h-12 w-12 rounded-full object-cover"
-                        />
-                        <div>
-                            <h4 className="font-medium text-gray-900">{sertifikat.issuer}</h4>
-                            <p className="text-sm text-gray-500">
-                                {new Date(sertifikat.issueDate).toLocaleDateString('en-US', {
-                                    month: 'long',
-                                    year: 'numeric'
-                                })}
-                            </p>
+                <div className="space-y-4 md:p-6 bg-white md:flex md:items-center md:justify-center md:h-full">
+                    <div className="md:w-full md:h-full md:flex md:flex-col md:justify-between md:bg-gray-100 p-3 md:p-6 rounded-3xl">
+                        <div className="flex items-center space-x-4 mb-6">
+                            <img
+                                src={sertifikat.issuerLogo}
+                                alt={sertifikat.issuer}
+                                className="h-16 w-16 rounded-full object-cover border-2 border-indigo-200"
+                                loading="lazy"
+                            />
+                            <div>
+                                <h4 className="text-xl font-semibold text-gray-900">
+                                    {sertifikat.issuer}
+                                </h4>
+                                <p className="text-sm text-gray-500">
+                                    {new Date(
+                                        sertifikat.issueDate
+                                    ).toLocaleDateString("en-US", {
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
+                                </p>
+                            </div>
                         </div>
+                        <div className="mb-6">
+                            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                                {sertifikat.title}
+                            </h2>
+                            <p className="text-lg text-gray-600 mb-4">
+                                {sertifikat.description}
+                            </p>
+                            <span className="inline-block rounded-full bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-800">
+                                {sertifikat.category}
+                            </span>
+                        </div>
+                        <LinkPreview
+                            url={sertifikat.certLink}
+                            className="w-full inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white py-3 px-6 rounded-lg text-lg font-semibold transition-colors hover:bg-indigo-700"
+                        >
+                            <span>View Certificate</span>
+                            <ExternalLink size={20} />
+                        </LinkPreview>
                     </div>
-                    <div>
-                        <h2 className="mb-2 text-2xl font-bold text-gray-900">{sertifikat.title}</h2>
-                        <p className="text-gray-600">{sertifikat.description}</p>
-                    </div>
-                    <span className="inline-block rounded-full bg-indigo-100 px-3 py-1 text-sm text-indigo-800">
-                        {sertifikat.category}
-                    </span>
-                    <a
-                        href={sertifikat.certLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center space-x-2 text-indigo-600 transition-colors hover:text-indigo-800"
-                    >
-                        <span>View Certificate</span>
-                        <ExternalLink size={16} />
-                    </a>
                 </div>
             </div>
         </motion.div>
     </motion.div>
-);
+));
 
 const SertifikatGallery: React.FC = () => {
-    const [selectedCertificate, setSelectedCertificate] = useState<Sertifikat | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCertificate, setSelectedCertificate] =
+        useState<Sertifikat | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(
+        null
+    );
     const [searchQuery, setSearchQuery] = useState("");
     const [hoveredId, setHoveredId] = useState<number | null>(null);
 
-    const categories = ["All", ...Array.from(new Set(sertifikatData.map(item => item.category)))];
+    // Memoize categories
+    const categories = useMemo(
+        () => [
+            "All",
+            ...Array.from(
+                new Set(sertifikatData.map((item) => item.category))
+            ),
+        ],
+        []
+    );
 
-    const filteredCertificates = sertifikatData.filter(cert => {
-        const matchesCategory = !selectedCategory || cert.category === selectedCategory;
-        const matchesSearch = cert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            cert.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            cert.issuer.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-    });
+    // Memoize filtered certificates
+    const filteredCertificates = useMemo(() => {
+        return sertifikatData.filter((cert) => {
+            const matchesCategory =
+                !selectedCategory || cert.category === selectedCategory;
+            const matchesSearch =
+                cert.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                cert.description
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                cert.issuer.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+    }, [selectedCategory, searchQuery]);
 
-    const handlePrev = () => {
+    // Memoize handlers
+    const handlePrev = useCallback(() => {
         if (selectedCertificate) {
-            const currentIndex = sertifikatData.findIndex(cert => cert.id === selectedCertificate.id);
-            const prevIndex = (currentIndex - 1 + sertifikatData.length) % sertifikatData.length;
+            const currentIndex = sertifikatData.findIndex(
+                (cert) => cert.id === selectedCertificate.id
+            );
+            const prevIndex =
+                (currentIndex - 1 + sertifikatData.length) %
+                sertifikatData.length;
             setSelectedCertificate(sertifikatData[prevIndex]);
         }
-    };
+    }, [selectedCertificate]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (selectedCertificate) {
-            const currentIndex = sertifikatData.findIndex(cert => cert.id === selectedCertificate.id);
+            const currentIndex = sertifikatData.findIndex(
+                (cert) => cert.id === selectedCertificate.id
+            );
             const nextIndex = (currentIndex + 1) % sertifikatData.length;
             setSelectedCertificate(sertifikatData[nextIndex]);
         }
-    };
+    }, [selectedCertificate]);
+
+    const handleCategoryChange = useCallback((category: string) => {
+        setSelectedCategory(category === "All" ? null : category);
+    }, []);
 
     return (
-        <div className="container mx-auto space-y-8 px-4 py-8">
+        <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex-1">
                     <input
@@ -217,11 +391,13 @@ const SertifikatGallery: React.FC = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className={`rounded-full px-4 py-2 transition-colors ${
-                                (selectedCategory === category || (category === "All" && selectedCategory === null))
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-indigo-100 text-indigo-800 hover:bg-indigo-200'
+                                selectedCategory === category ||
+                                (category === "All" &&
+                                    selectedCategory === null)
+                                    ? "bg-indigo-600 text-white"
+                                    : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
                             }`}
-                            onClick={() => setSelectedCategory(category === "All" ? null : category)}
+                            onClick={() => handleCategoryChange(category)}
                         >
                             {category}
                         </motion.button>
@@ -231,7 +407,7 @@ const SertifikatGallery: React.FC = () => {
 
             <motion.div
                 layout
-                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 my-8"
             >
                 <AnimatePresence>
                     {filteredCertificates.map((sertifikat) => (
@@ -241,7 +417,10 @@ const SertifikatGallery: React.FC = () => {
                             initial={{ opacity: 0 }}
                             animate={{
                                 opacity: 1,
-                                filter: hoveredId && hoveredId !== sertifikat.id ? 'blur(2px) brightness(0.7)' : 'blur(0px)'
+                                filter:
+                                    hoveredId && hoveredId !== sertifikat.id
+                                        ? "blur(2px) brightness(0.7)"
+                                        : "blur(0px)",
                             }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.5 }}
@@ -250,7 +429,9 @@ const SertifikatGallery: React.FC = () => {
                         >
                             <SertifikatCard
                                 sertifikat={sertifikat}
-                                onClick={() => setSelectedCertificate(sertifikat)}
+                                onClick={() =>
+                                    setSelectedCertificate(sertifikat)
+                                }
                             />
                         </motion.div>
                     ))}

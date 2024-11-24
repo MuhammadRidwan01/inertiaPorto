@@ -26,6 +26,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@radix-ui/react-hover-card": "^1.1.2",
         "@react-three/drei": "^9.111.3",
         "@react-three/fiber": "^8.17.7",
         "@react-three/rapier": "^1.4.0",
@@ -39,6 +40,7 @@
         "leva": "^0.9.35",
         "lucide-react": "^0.439.0",
         "meshline": "^3.3.1",
+        "qss": "^3.0.0",
         "simplex-noise": "^4.0.3",
         "tailwind-merge": "^2.5.2",
         "three": "^0.167.1",
