@@ -6,6 +6,7 @@ import {
     IconStar,
     IconFileFilled,
     IconCertificate,
+    IconBrandGithub,
 } from "@tabler/icons-react";
 import Hero from "@/utils/layout/Hero";
 import Projects from "@/utils/layout/Projects";
@@ -43,6 +44,13 @@ export default function Welcome() {
                 <IconFileFilled className="h-full w-full text-neutral-500 dark:text-neutral-300" />
             ),
             href: "#projects",
+        },
+        {
+            title: "Github",
+            icon: (
+                <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+            ),
+            href: "#github",
         },
     ];
 

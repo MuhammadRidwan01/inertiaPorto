@@ -101,7 +101,7 @@ const sertifikatData: Sertifikat[] = [
         description: "In-depth understanding of AWS infrastructure and services",
         category: "Cloud Computing",
         issuer: "Dicoding",
-        issueDate: "2024-06-01",
+        issueDate: "2024-11-23",
         certLink: "https://www.dicoding.com/certificates/L4PQ570GVZO1",
         issuerLogo: getAssetUrl("/image/logos/dicoding.webp"),
     },
@@ -252,13 +252,13 @@ const DetailModal: React.FC<{
                             onClick={onPrev}
                             className="rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
                         >
-                            <ChevronLeft size={20} />
+                            <ChevronLeft size={20} className=" text-black"/>
                         </button>
                         <button
                             onClick={onNext}
                             className="rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
                         >
-                            <ChevronRight size={20} />
+                            <ChevronRight size={20} className=" text-black"/>
                         </button>
                     </div>
                 </div>
