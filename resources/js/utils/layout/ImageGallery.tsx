@@ -26,7 +26,7 @@ interface Sertifikat {
 // Helper function to ensure URLs are absolute
 const getAssetUrl = (path: string): string => {
     // You can change this to your actual domain
-    const domain = "https://395f-66-96-225-109.ngrok-free.app";
+    const domain = "http://127.0.0.1:8000";
 
     // If the path is already a full URL, return it as is
     if (path.startsWith('http://') || path.startsWith('https://')) {
@@ -39,6 +39,17 @@ const getAssetUrl = (path: string): string => {
 };
 
 const sertifikatData: Sertifikat[] = [
+    {
+        id: 0,
+        src: getAssetUrl("/image/certificates/IC3GS6Level1.webp"),
+        title: "IC3 GS6",
+        description: "Digital Literacy Certification - Technology Basics, Digital Citizenship, and more.",
+        category: "Programming",
+        issuer: "Certiport",
+        issueDate: "2024-11-29",
+        certLink: "https://www.certiport.com/portal/pages/credentialverification.aspx?code=u9Qb-XM77",
+        issuerLogo: getAssetUrl("/image/logos/ic3.webp")
+    },
     {
         id: 1,
         src: getAssetUrl("/image/certificates/Dkn_depan.webp"),
@@ -177,13 +188,14 @@ const SertifikatCard: React.FC<{
                     className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     loading="lazy" // Lazy loading untuk gambar
                 />
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute inset-0 flex items-center justify-center  opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <motion.button
                         whileHover={{ scale: 1.1 }}
-                        className="rounded-lg bg-white px-4 py-2 font-medium text-indigo-600"
+                        className="rounded-lg bg-gradient-to-br from-indigo-900/60 to-indigo-950/60 backdrop-blur-none border border-white/20 px-4 py-2 font-medium text-white shadow-lg transition-all duration-300"
                     >
                         View Details
                     </motion.button>
+
                 </div>
             </div>
             <div className="space-y-3 p-4">
@@ -236,7 +248,7 @@ const DetailModal: React.FC<{
                 onClick={onClose}
                 className="absolute right-4 top-4 z-10 rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
             >
-                <X size={20} className="text-black"/>
+                <X size={20} className="text-black" />
             </button>
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="relative">
@@ -252,13 +264,13 @@ const DetailModal: React.FC<{
                             onClick={onPrev}
                             className="rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
                         >
-                            <ChevronLeft size={20} className=" text-black"/>
+                            <ChevronLeft size={20} className=" text-black" />
                         </button>
                         <button
                             onClick={onNext}
                             className="rounded-full bg-white p-2 shadow-lg transition-colors hover:bg-gray-100"
                         >
-                            <ChevronRight size={20} className=" text-black"/>
+                            <ChevronRight size={20} className=" text-black" />
                         </button>
                     </div>
                 </div>
@@ -390,13 +402,12 @@ const SertifikatGallery: React.FC = () => {
                             key={category}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`rounded-full px-4 py-2 transition-colors ${
-                                selectedCategory === category ||
-                                (category === "All" &&
-                                    selectedCategory === null)
+                            className={`rounded-full px-4 py-2 transition-colors ${selectedCategory === category ||
+                                    (category === "All" &&
+                                        selectedCategory === null)
                                     ? "bg-indigo-600 text-white"
                                     : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
-                            }`}
+                                }`}
                             onClick={() => handleCategoryChange(category)}
                         >
                             {category}
